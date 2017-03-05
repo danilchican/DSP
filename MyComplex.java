@@ -2,12 +2,12 @@ package com.bsuir.danilchican;
 
 import java.util.Objects;
 
-public class Complex {
+public class MyComplex {
     private final double re;   // the real part
     private final double im;   // the imaginary part
 
     // create a new object with the given real and imaginary parts
-    public Complex(double real, double imag) {
+    public MyComplex(double real, double imag) {
         re = real;
         im = imag;
     }
@@ -31,43 +31,43 @@ public class Complex {
     }
 
     // return a new Complex object whose value is (this + b)
-    public Complex plus(Complex b) {
-        Complex a = this;             // invoking object
+    public MyComplex plus(MyComplex b) {
+        MyComplex a = this;             // invoking object
         double real = a.re + b.re;
         double imag = a.im + b.im;
-        return new Complex(real, imag);
+        return new MyComplex(real, imag);
     }
 
     // return a new Complex object whose value is (this - b)
-    public Complex minus(Complex b) {
-        Complex a = this;
+    public MyComplex minus(MyComplex b) {
+        MyComplex a = this;
         double real = a.re - b.re;
         double imag = a.im - b.im;
-        return new Complex(real, imag);
+        return new MyComplex(real, imag);
     }
 
     // return a new Complex object whose value is (this * b)
-    public Complex times(Complex b) {
-        Complex a = this;
+    public MyComplex times(MyComplex b) {
+        MyComplex a = this;
         double real = a.re * b.re - a.im * b.im;
         double imag = a.re * b.im + a.im * b.re;
-        return new Complex(real, imag);
+        return new MyComplex(real, imag);
     }
 
     // return a new object whose value is (this * alpha)
-    public Complex scale(double alpha) {
-        return new Complex(alpha * re, alpha * im);
+    public MyComplex scale(double alpha) {
+        return new MyComplex(alpha * re, alpha * im);
     }
 
     // return a new Complex object whose value is the conjugate of this
-    public Complex conjugate() {
-        return new Complex(re, -im);
+    public MyComplex conjugate() {
+        return new MyComplex(re, -im);
     }
 
     // return a new Complex object whose value is the reciprocal of this
-    public Complex reciprocal() {
+    public MyComplex reciprocal() {
         double scale = re*re + im*im;
-        return new Complex(re / scale, -im / scale);
+        return new MyComplex(re / scale, -im / scale);
     }
 
     // return the real or imaginary part
@@ -75,38 +75,41 @@ public class Complex {
     public double im() { return im; }
 
     // return a / b
-    public Complex divides(Complex b) {
-        Complex a = this;
+    public MyComplex divides(MyComplex b) {
+        MyComplex a = this;
         return a.times(b.reciprocal());
     }
 
     // return a new Complex object whose value is the complex exponential of this
-    public Complex exp() {
-        return new Complex(Math.exp(re) * Math.cos(im), Math.exp(re) * Math.sin(im));
+    public MyComplex exp() {
+        return new MyComplex(Math.exp(re) * Math.cos(im), Math.exp(re) * Math.sin(im));
+    }
+    
+    // return a new Complex object whose value is the complex exponential of this
+    public MyComplex exp(int step) {
+        return new MyComplex(Math.exp(re) * Math.cos(im), Math.exp(re) * Math.sin(im));
     }
 
     // return a new Complex object whose value is the complex sine of this
-    public Complex sin() {
-        return new Complex(Math.sin(re) * Math.cosh(im), Math.cos(re) * Math.sinh(im));
+    public MyComplex sin() {
+        return new MyComplex(Math.sin(re) * Math.cosh(im), Math.cos(re) * Math.sinh(im));
     }
 
     // return a new Complex object whose value is the complex cosine of this
-    public Complex cos() {
-        return new Complex(Math.cos(re) * Math.cosh(im), -Math.sin(re) * Math.sinh(im));
+    public MyComplex cos() {
+        return new MyComplex(Math.cos(re) * Math.cosh(im), -Math.sin(re) * Math.sinh(im));
     }
 
     // return a new Complex object whose value is the complex tangent of this
-    public Complex tan() {
+    public MyComplex tan() {
         return sin().divides(cos());
     }
-    
-
 
     // a static version of plus
-    public static Complex plus(Complex a, Complex b) {
+    public static MyComplex plus(MyComplex a, MyComplex b) {
         double real = a.re + b.re;
         double imag = a.im + b.im;
-        Complex sum = new Complex(real, imag);
+        MyComplex sum = new MyComplex(real, imag);
         return sum;
     }
 
@@ -114,7 +117,7 @@ public class Complex {
     public boolean equals(Object x) {
         if (x == null) return false;
         if (this.getClass() != x.getClass()) return false;
-        Complex that = (Complex) x;
+        MyComplex that = (MyComplex) x;
         return (this.re == that.re) && (this.im == that.im);
     }
 
