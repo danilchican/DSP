@@ -40,12 +40,21 @@ public class Data {
       double val = (2 * Math.PI / N) * i;
       double yReal = Math.sin(coefSinX * val) + Math.cos(coefCosX * val); // function
       
-      x.add(val); // x goes from -1 to 1
-      //System.out.println(val);
-
+      x.add(val); 
       y.add(yReal);
       
       yComplexes.add(Complex.valueOf(yReal, 0));
+    }
+    
+    initFFT();
+  }
+  
+  private static void initFFT() {
+    for(int i = 0; i < Data.N; i++) {
+      Complex c = Complex.valueOf(0, 0);
+      Transform.b.add(c);
+      Transform.c.add(c);
+      Transform.y.add(c);
     }
   }
 
