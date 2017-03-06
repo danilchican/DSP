@@ -25,6 +25,7 @@ public class Data {
    * Numbers.
    */
   public static Vector<Double> x = new Vector<>();
+  public static Vector<Double> xFFT = new Vector<>();
   public static Vector<Double> y = new Vector<>();
   
   /**
@@ -40,22 +41,13 @@ public class Data {
       double val = (2 * Math.PI / N) * i;
       double yReal = Math.sin(coefSinX * val) + Math.cos(coefCosX * val); // function
       
+      xFFT.add((double)i);
       x.add(val); 
       y.add(yReal);
       
       yComplexes.add(Complex.valueOf(yReal, 0));
     }
     
-    initFFT();
-  }
-  
-  private static void initFFT() {
-    for(int i = 0; i < Data.N; i++) {
-      Complex c = Complex.valueOf(0, 0);
-      Transform.b.add(c);
-      Transform.c.add(c);
-      Transform.y.add(c);
-    }
   }
 
 }

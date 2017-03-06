@@ -6,9 +6,10 @@ import org.jscience.mathematics.number.Complex;
 public class Main {
 
   /*
-   * 4 variant signal: y = sin(2x) + cos(7x) count of points: 64
+   * 4 variant 
+   * signal: y = sin(2x) + cos(7x) 
+   * steps: 64
    */
-
 
   public static void main(String[] args) {
     Data.init();
@@ -25,7 +26,7 @@ public class Main {
 
     /********************************/
 
-    Graph g2 = new Graph("Graph 2", Data.x, mods);
+    Graph g2 = new Graph("Graph 2", Data.xFFT, mods);
     g2.show();
 
     Graph g3 = new Graph("Graph 3", Data.x, modsRev);
@@ -38,7 +39,7 @@ public class Main {
     Vector<Double> modsFFT = Transform.getModule(fftData);
     Vector<Double> modsRevFFT = Transform.getRe(revFftData);
 
-    Graph g4 = new Graph("Graph 4", Data.x, modsFFT);
+    Graph g4 = new Graph("Graph 4", Data.xFFT, modsFFT);
     g4.show();
 
     Graph g5 = new Graph("Graph 5", Data.x, modsRevFFT);

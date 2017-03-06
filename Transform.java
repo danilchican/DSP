@@ -23,13 +23,6 @@ public class Transform {
   private static double imag = Math.sin(2 * Math.PI / Data.N);
 
   /**
-   * Vectors for FFT.
-   */
-  public static Vector<Complex> b = new Vector<>();
-  public static Vector<Complex> c = new Vector<>();
-  public static Vector<Complex> y = new Vector<>();
-
-  /**
    * Reverse bits of number.
    * 
    * @param x
@@ -114,7 +107,6 @@ public class Transform {
     }
 
     res1 = FFT(x0, N / 2, _dir);
-
     res2 = FFT(x1, N / 2, _dir);
 
     Vector<Complex> vec = new Vector<>();
