@@ -46,14 +46,14 @@ public class Main {
     /**
      * DFT: operations '+' = '*'
      */
-    System.out.println("DFT: " + getMulSumDFT());
+    printMulSumDFT();
 
     /**
      * FFT: operations '+' = '*'
      */
-    System.out.println("FFT: " + getMulSumFFT());
+    System.out.println("FFT mul/sum: " + getMulSumFFT());
     
-    System.out.println("Efficiency: " + (getMulSumDFT() / getMulSumFFT()));
+    System.out.println("Efficiency: " + (getMulDFT() / getMulSumFFT()));
   }
 
   /**
@@ -61,11 +61,25 @@ public class Main {
    * 
    * @return
    */
-  private static int getMulSumDFT() {
-    int mulDFT = Data.N * Data.N / 2 + Data.N;
-    int sumDFT = mulDFT;
-
-    return sumDFT;
+  private static void printMulSumDFT() {
+    System.out.println("DFT mul: " + getMulDFT());
+    System.out.println("DFT sum: " + getSumDFT());
+  }
+  
+  /**
+   * 
+   * @return
+   */
+  private static int getMulDFT() {
+    return Data.N * Data.N;
+  }
+  
+  /**
+   * 
+   * @return
+   */
+  private static int getSumDFT() {
+    return (Data.N * (Data.N - 1));
   }
 
   /**
