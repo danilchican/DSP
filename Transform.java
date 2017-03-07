@@ -28,10 +28,10 @@ public class Transform {
    * @param x
    * @return
    */
-  public static int reverseNumber(int x) {
+  public static int reverseNumber(int x, int N) {
     int j = 0;
 
-    for (int bits = 6; bits > 0; bits--) {
+    for (int bits = (int) (Math.log(N)/Math.log(2)); bits > 0; bits--) {
       j = j << 1;
       j = j + (x & 1);
       x = x >> 1;
@@ -58,7 +58,7 @@ public class Transform {
     }
 
     for (int x = 0; x < N; x++) {
-      int x2 = reverseNumber(x);
+      int x2 = reverseNumber(x, Data.N);
 
       Complex c2 = vec.get(x2);
       newVect.set(x, c2);
