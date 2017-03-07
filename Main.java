@@ -6,9 +6,7 @@ import org.jscience.mathematics.number.Complex;
 public class Main {
 
   /*
-   * 4 variant 
-   * signal: y = sin(2x) + cos(7x) 
-   * steps: 64
+   * 4 variant signal: y = sin(2x) + cos(7x) steps: 64
    */
 
   public static void main(String[] args) {
@@ -44,6 +42,38 @@ public class Main {
 
     Graph g5 = new Graph("Graph 5", Data.x, modsRevFFT);
     g5.show();
+
+    /**
+     * DFT: operations '+' = '*'
+     */
+    System.out.println(getMulSumDFT());
+
+    /**
+     * FFT: operations '+' = '*'
+     */
+    System.out.println(getMulSumFFT());
   }
 
+  /**
+   * 
+   * 
+   * @return
+   */
+  private static int getMulSumDFT() {
+    int mulDFT = Data.N * Data.N / 2 + Data.N;
+    int sumDFT = mulDFT;
+
+    return sumDFT;
+  }
+
+  /**
+   * 
+   * @return
+   */
+  private static int getMulSumFFT() {
+    int mulDFT = (int) (Data.N / 2 * (Math.log(Data.N) / Math.log(2)));
+    int sumDFT = mulDFT;
+
+    return sumDFT;
+  }
 }
