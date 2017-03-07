@@ -46,12 +46,14 @@ public class Main {
     /**
      * DFT: operations '+' = '*'
      */
-    System.out.println(getMulSumDFT());
+    System.out.println("DFT: " + getMulSumDFT());
 
     /**
      * FFT: operations '+' = '*'
      */
-    System.out.println(getMulSumFFT());
+    System.out.println("FFT: " + getMulSumFFT());
+    
+    System.out.println("Efficiency: " + (getMulSumDFT() / getMulSumFFT()));
   }
 
   /**
