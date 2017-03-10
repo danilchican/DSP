@@ -9,7 +9,7 @@ public class Data {
   /**
    * Count of points operations.
    */
-  public static final int N = 16;
+  public static final int N = 128;
 
   /**
    * sin(2x)

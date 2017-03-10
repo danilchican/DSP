@@ -60,7 +60,35 @@ public class Transform {
     
     return _result;
   }
+  
+  /**
+   * Round convolution.
+   * 
+   * @param _v1
+   * @param _v2
+   * @return
+   */
+  public static Vector<Complex> roundConv(Vector<Complex> _v1, Vector<Complex> _v2) {
+    Vector<Complex> res = new Vector<Complex>();
+    
+    for(int n = 0; n < Data.N; n++) {
+      Complex temp = Complex.valueOf(0, 0);
+      
+      for(int m = 0; m < Data.N; m++) {
+        int index = n - m;
+        
+        if(index < 0) {
+          index = Data.N + index;
+        }
+        
+        temp = temp.plus(_v1.get(m).times(_v2.get(index)));
+      }
 
+      res.add(temp);
+    }
+    
+    return res;
+  }
   
   /**
    * Convolution.
