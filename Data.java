@@ -9,7 +9,7 @@ public class Data {
   /**
    * Count of points operations.
    */
-  public static final int N = 64;
+  public static final int N = 16;
 
   /**
    * sin(2x)
@@ -24,19 +24,22 @@ public class Data {
   /**
    * Numbers.
    */
-  public static Vector<Double> x = new Vector<>();
   public static Vector<Double> xFFT = new Vector<>();
+  
+  public static Vector<Double> x = new Vector<>();
   public static Vector<Double> y = new Vector<>();
+  public static Vector<Double> z = new Vector<>();  
   
   /**
    * For DFT
    */
   public static Vector<Complex> yComplexes = new Vector<>();
+  public static Vector<Complex> zComplexes = new Vector<>();
 
   /**
    * Init data values.
    */
-  public static void init() {
+  public static void initLab1() {
     for (int i = 0; i < N; i++) {
       double val = (2 * Math.PI / N) * i;
       double yReal = Math.sin(coefSinX * val) + Math.cos(coefCosX * val); // function
@@ -48,6 +51,33 @@ public class Data {
       yComplexes.add(Complex.valueOf(yReal, 0));
     }
     
+  }
+  
+  /**
+   * Init data values.
+   */
+  public static void initLab2() {
+    for (int i = 0; i < N; i++) {
+      double val = (Math.PI / N) * i;
+      double yReal = Math.sin(coefSinX * val); // function first
+      double zReal = Math.cos(coefCosX * val); // function second
+      
+      xFFT.add((double)i);
+      
+      x.add(val); 
+      y.add(yReal);
+      z.add(zReal);
+      
+      yComplexes.add(Complex.valueOf(yReal, 0));
+      zComplexes.add(Complex.valueOf(zReal, 0));
+    }
+    
+  }
+  
+  public static void showVec(Vector<Complex> vec, String str) {
+    for(Complex e: vec) {
+      System.out.println(str + ": " + e.toString());
+    }
   }
 
 }

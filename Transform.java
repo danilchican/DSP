@@ -41,6 +41,83 @@ public class Transform {
   }
 
   /**
+   * Return vector for correlation.
+   * 
+   * @param _v1
+   * @param _v2
+   * @return 
+   */
+  public static Vector<Complex> corr(Vector<Complex> _v1, Vector<Complex> _v2) {
+    Vector<Complex> res1, res2;
+    Vector<Complex> _result;
+    
+    res1 = _FFT(_v1, Data.N, 1);
+    res2 = _FFT(_v2, Data.N, 1);
+    
+    res1 = conjugate(res1);
+    
+    _result = _FFT(multVect(res1, res2), Data.N, -1);
+    
+    return _result;
+  }
+
+  
+  /**
+   * Convolution.
+   * 
+   * @param _v1
+   * @param _v2
+   * @return
+   */
+  public static Vector<Complex> conv(Vector<Complex> _v1, Vector<Complex> _v2) {
+    Vector<Complex> res1, res2;
+    Vector<Complex> _result;
+    
+    res1 = _FFT(_v1, Data.N, 1);
+    res2 = _FFT(_v2, Data.N, 1);
+    
+    _result = _FFT(multVect(res1, res2), Data.N, -1);
+    
+    return _result;
+  }
+  
+  /**
+   * Multiple vectors.
+   * Returns new vector of complex numbers by multiplying their.
+   * 
+   * @param _v1
+   * @param _v2
+   * @return
+   */
+  public static Vector<Complex> multVect(Vector<Complex> _v1, Vector<Complex> _v2) {
+    Vector<Complex> multipleVect = new Vector<Complex>();
+    
+    for(int i = 0; i < Data.N; i++) {
+      Complex c = _v1.get(i).times(_v2.get(i));
+      multipleVect.add(i, c);
+    }
+    
+    return multipleVect;
+  }
+  
+  /**
+   * Conjugate (сопряж-е) vector of complexes numbers.
+   * 
+   * @param _vec
+   * @return
+   */
+  public static Vector<Complex> conjugate(Vector<Complex> _vec) {
+    Vector<Complex> res = new Vector<Complex>();
+    
+    for(Complex e: _vec) {
+      Complex c = Complex.valueOf(e.getReal(), (-1) * e.getImaginary());   
+      res.add(c);
+    }
+    
+    return res;
+  }
+  
+  /**
    * Fast Fourier's transforming.
    * 
    * @param _a
@@ -51,6 +128,14 @@ public class Transform {
   public static Vector<Complex> _FFT(Vector<Complex> _a, int N, int _dir) {
     
     Vector<Complex> vec = FFT(_a, N, _dir);
+
+    if(_dir == -1) {
+      for(int i = 0; i < Data.N; i++) {
+        Complex x = vec.get(i).divide((double)Data.N);
+        vec.set(i, x);
+      }
+    }
+    
     Vector<Complex> newVect = new Vector<>();
     
     for(int i = 0; i < N; i++) {
