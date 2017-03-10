@@ -40,6 +40,13 @@ public class Transform {
     return j;
   }
 
+  /**
+   * Return vector for round correlation.
+   * 
+   * @param _v1
+   * @param _v2
+   * @return
+   */
   public static Vector<Complex> roundCorr(Vector<Complex> _v1, Vector<Complex> _v2) {
     Vector<Complex> res = new Vector<Complex>();
     

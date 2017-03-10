@@ -43,42 +43,8 @@ public class Main {
     
     Graph g6 = new Graph("RoundCorr Graph 6", Data.x, Transform.getRe(vec));
     g6.show();
+    
+    
   }
 
-  /**
-   * 
-   * 
-   * @return
-   */
-  private static void printMulSumDFT() {
-    System.out.println("DFT mul: " + getMulDFT());
-    System.out.println("DFT sum: " + getSumDFT());
-  }
-  
-  /**
-   * 
-   * @return
-   */
-  private static int getMulDFT() {
-    return Data.N * Data.N;
-  }
-  
-  /**
-   * 
-   * @return
-   */
-  private static int getSumDFT() {
-    return (Data.N * (Data.N - 1));
-  }
-
-  /**
-   * 
-   * @return
-   */
-  private static int getMulSumFFT() {
-    int mulDFT = (int) (Data.N / 2 * (Math.log(Data.N) / Math.log(2)));
-    int sumDFT = mulDFT;
-
-    return sumDFT;
-  }
 }
