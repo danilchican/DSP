@@ -40,6 +40,28 @@ public class Transform {
     return j;
   }
 
+  public static Vector<Complex> roundCorr(Vector<Complex> _v1, Vector<Complex> _v2) {
+    Vector<Complex> res = new Vector<Complex>();
+    
+    for(int n = 0; n < Data.N; n++) {
+      Complex temp = Complex.valueOf(0, 0);
+      
+      for(int m = 0; m < Data.N; m++) {
+        int index = n + m;
+        
+        if(index >= Data.N) {
+          index -= Data.N;
+        }
+        
+        temp = temp.plus(_v1.get(m).times(_v2.get(index)));
+      }
+
+      res.add(temp);
+    }
+    
+    return res;
+  }
+  
   /**
    * Return vector for correlation.
    * 

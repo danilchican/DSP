@@ -38,6 +38,11 @@ public class Main {
     
     Graph g5 = new Graph("RoundConv Graph 5", Data.x, Transform.getRe(vec));
     g5.show();
+    
+    vec = Transform.roundCorr(Data.yComplexes, Data.zComplexes);
+    
+    Graph g6 = new Graph("RoundCorr Graph 6", Data.x, Transform.getRe(vec));
+    g6.show();
   }
 
   /**
