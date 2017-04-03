@@ -42,6 +42,16 @@ public class Main {
     
     Graph g3 = new Graph("DTWR", Data.x, Transform.getRe(vec));
     g3.show();    
+    
+    vec = Transform._FWT(Data.yComplexes, Data.N, 1);
+    
+    Graph g4 = new Graph("FWT", Data.x, Transform.getModule(vec));
+    g4.show(); 
+
+    vec = Transform._FWT(vec, Data.N, -1);
+    
+    Graph g5 = new Graph("FWTR", Data.x, Transform.getRe(vec));
+    g5.show();    
   }
 
 }

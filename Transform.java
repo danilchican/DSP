@@ -48,6 +48,57 @@ public class Transform {
       }
     }
   }
+  
+  public static Vector<Complex> FWT(Vector<Complex> _a, int N, int _dir) {
+    if (N == 1)
+      return _a;
+
+    Vector<Complex> x0 = new Vector<>(N / 2);
+    Vector<Complex> x1 = new Vector<>(N / 2);
+
+    Vector<Complex> res1 = new Vector<>(N / 2);
+    Vector<Complex> res2 = new Vector<>(N / 2);
+
+    for (int i = 0; i < N / 2; i++) {
+      res1.add(Complex.valueOf(0, 0));
+      res2.add(Complex.valueOf(0, 0));
+    }
+
+    for (int i = 0; i < N / 2; i++) {
+      x0.add(Complex.valueOf(0, 0));
+      x1.add(Complex.valueOf(0, 0));
+    }
+
+    for (int j = 0; j < N / 2; j++) {
+      x0.set(j, _a.get(j).plus(_a.get(j + N / 2)));
+      x1.set(j, _a.get(j).minus(_a.get(j + N / 2)));
+    }
+
+    res1 = FWT(x0, N / 2, _dir);
+    res2 = FWT(x1, N / 2, _dir);
+
+    Vector<Complex> vec = new Vector<>();
+    vec.addAll(res1);
+    vec.addAll(res2);
+
+    return vec;
+  }
+  
+  public static Vector<Complex> _FWT(Vector<Complex> _a, int N, int _dir) {
+    Vector<Complex> vec = FWT(_a, N, _dir);
+    
+    if(_dir == 1) {
+      Vector<Complex> res = new Vector<>();
+      
+      for(Complex e: vec) {
+        res.add(e.divide(Data.N));
+      }
+
+      return res; 
+    }
+    
+    return vec;
+  }
 
   /**
    * Discrete Walsh tranforming.
