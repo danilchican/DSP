@@ -2,9 +2,14 @@ package com.bsuir.danilchican;
 
 import java.util.Vector;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jscience.mathematics.number.Complex;
 
 public class Transform {
+
+  private static Logger LOGGER = LogManager.getLogger();
 
   /**
    * Result vector DFT.
@@ -23,6 +28,57 @@ public class Transform {
   private static double imag = Math.sin(2 * Math.PI / Data.N);
 
   /**
+   * Hadamard.
+   */
+  private static int[][] hadamard = new int[Data.N][Data.N];
+
+  /**
+   * Fill Hadamard numbers.
+   */
+  public static void fillHadamardNumbers(int N) {
+    hadamard[0][0] = 1;
+
+    for (int k = 1; k < N; k += k) {
+      for (int i = 0; i < k; i++) {
+        for (int j = 0; j < k; j++) {
+          hadamard[i + k][j] = hadamard[i][j];
+          hadamard[i][j + k] = hadamard[i][j];
+          hadamard[i + k][j + k] = hadamard[i][j] * (-1);
+        }
+      }
+    }
+  }
+
+  /**
+   * Discrete Walsh tranforming.
+   * 
+   * @param _yComplexes
+   * @return
+   */
+  public static Vector<Complex> DTW(Vector<Complex> _yComplexes) {
+    Vector<Complex> res = new Vector<>();
+
+    for (int i = 0; i < Data.N; i++) {
+      res.add(Complex.valueOf(0, 0));
+    }
+    
+    for (int k = 0; k < Data.N; k++) {
+        for (int i = 0; i < Data.N; i++) {
+          Complex c = _yComplexes.get(i).times(hadamard[k][i]);
+          Complex temp = res.get(k).plus(c);
+          
+          res.set(k, temp);
+        }
+        Complex t = res.get(k).divide(Data.N);
+        res.set(k, t);
+
+        LOGGER.log(Level.DEBUG, "Complex DTW[" + k + "]: " + res.get(k).toString());
+    }
+    
+    return res;
+}
+
+  /**
    * Reverse bits of number.
    * 
    * @param x
@@ -31,7 +87,7 @@ public class Transform {
   public static int reverseNumber(int x, int N) {
     int j = 0;
 
-    for (int bits = (int) (Math.log(N)/Math.log(2)); bits > 0; bits--) {
+    for (int bits = (int) (Math.log(N) / Math.log(2)); bits > 0; bits--) {
       j = j << 1;
       j = j + (x & 1);
       x = x >> 1;
@@ -49,47 +105,47 @@ public class Transform {
    */
   public static Vector<Complex> roundCorr(Vector<Complex> _v1, Vector<Complex> _v2) {
     Vector<Complex> res = new Vector<Complex>();
-    
-    for(int n = 0; n < Data.N; n++) {
+
+    for (int n = 0; n < Data.N; n++) {
       Complex temp = Complex.valueOf(0, 0);
-      
-      for(int m = 0; m < Data.N; m++) {
+
+      for (int m = 0; m < Data.N; m++) {
         int index = n + m;
-        
-        if(index >= Data.N) {
+
+        if (index >= Data.N) {
           index -= Data.N;
         }
-        
+
         temp = temp.plus(_v1.get(m).times(_v2.get(index)));
       }
 
       res.add(temp);
     }
-    
+
     return res;
   }
-  
+
   /**
    * Return vector for correlation.
    * 
    * @param _v1
    * @param _v2
-   * @return 
+   * @return
    */
   public static Vector<Complex> corr(Vector<Complex> _v1, Vector<Complex> _v2) {
     Vector<Complex> res1, res2;
     Vector<Complex> _result;
-    
+
     res1 = _FFT(_v1, Data.N, 1);
     res2 = _FFT(_v2, Data.N, 1);
-    
+
     res1 = conjugate(res1);
-    
+
     _result = _FFT(multVect(res1, res2), Data.N, -1);
-    
+
     return _result;
   }
-  
+
   /**
    * Round convolution.
    * 
@@ -99,26 +155,26 @@ public class Transform {
    */
   public static Vector<Complex> roundConv(Vector<Complex> _v1, Vector<Complex> _v2) {
     Vector<Complex> res = new Vector<Complex>();
-    
-    for(int n = 0; n < Data.N; n++) {
+
+    for (int n = 0; n < Data.N; n++) {
       Complex temp = Complex.valueOf(0, 0);
-      
-      for(int m = 0; m < Data.N; m++) {
+
+      for (int m = 0; m < Data.N; m++) {
         int index = n - m;
-        
-        if(index < 0) {
+
+        if (index < 0) {
           index = Data.N + index;
         }
-        
+
         temp = temp.plus(_v1.get(m).times(_v2.get(index)));
       }
 
       res.add(temp);
     }
-    
+
     return res;
   }
-  
+
   /**
    * Convolution.
    * 
@@ -129,18 +185,17 @@ public class Transform {
   public static Vector<Complex> conv(Vector<Complex> _v1, Vector<Complex> _v2) {
     Vector<Complex> res1, res2;
     Vector<Complex> _result;
-    
+
     res1 = _FFT(_v1, Data.N, 1);
     res2 = _FFT(_v2, Data.N, 1);
-    
+
     _result = _FFT(multVect(res1, res2), Data.N, -1);
-    
+
     return _result;
   }
-  
+
   /**
-   * Multiple vectors.
-   * Returns new vector of complex numbers by multiplying their.
+   * Multiple vectors. Returns new vector of complex numbers by multiplying their.
    * 
    * @param _v1
    * @param _v2
@@ -148,15 +203,15 @@ public class Transform {
    */
   public static Vector<Complex> multVect(Vector<Complex> _v1, Vector<Complex> _v2) {
     Vector<Complex> multipleVect = new Vector<Complex>();
-    
-    for(int i = 0; i < Data.N; i++) {
+
+    for (int i = 0; i < Data.N; i++) {
       Complex c = _v1.get(i).times(_v2.get(i));
       multipleVect.add(i, c);
     }
-    
+
     return multipleVect;
   }
-  
+
   /**
    * Conjugate (сопряж-е) vector of complexes numbers.
    * 
@@ -165,15 +220,15 @@ public class Transform {
    */
   public static Vector<Complex> conjugate(Vector<Complex> _vec) {
     Vector<Complex> res = new Vector<Complex>();
-    
-    for(Complex e: _vec) {
-      Complex c = Complex.valueOf(e.getReal(), (-1) * e.getImaginary());   
+
+    for (Complex e : _vec) {
+      Complex c = Complex.valueOf(e.getReal(), (-1) * e.getImaginary());
       res.add(c);
     }
-    
+
     return res;
   }
-  
+
   /**
    * Fast Fourier's transforming.
    * 
@@ -183,20 +238,20 @@ public class Transform {
    * @return
    */
   public static Vector<Complex> _FFT(Vector<Complex> _a, int N, int _dir) {
-    
+
     Vector<Complex> vec = FFT(_a, N, _dir);
 
-    if(_dir == -1) {
-      for(int i = 0; i < Data.N; i++) {
-        Complex x = vec.get(i).divide((double)Data.N);
+    if (_dir == -1) {
+      for (int i = 0; i < Data.N; i++) {
+        Complex x = vec.get(i).divide((double) Data.N);
         vec.set(i, x);
       }
     }
-    
+
     Vector<Complex> newVect = new Vector<>();
-    
-    for(int i = 0; i < N; i++) {
-      newVect.add(Complex.valueOf(0,0));
+
+    for (int i = 0; i < N; i++) {
+      newVect.add(Complex.valueOf(0, 0));
     }
 
     for (int x = 0; x < N; x++) {

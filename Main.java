@@ -1,6 +1,10 @@
 package com.bsuir.danilchican;
 
 import java.util.Vector;
+
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jscience.mathematics.number.Complex;
 
 /*
@@ -15,36 +19,24 @@ import org.jscience.mathematics.number.Complex;
  */
 public class Main {
   
-  public static void main(String[] args) {
-    Data.initLab2();
+  private static Logger LOGGER = LogManager.getLogger();
+  
+  public static void main(String[] args) {    
+    LOGGER.log(Level.INFO, "Started init lab1..");
+    Data.initLab1();
+    LOGGER.log(Level.INFO, "Finished init lab1..");
 
     Graph g1 = new Graph("Input XY data", Data.x, Data.y);
-    g1.show();
+    g1.show();    
     
-    Graph g2 = new Graph("Input XZ data", Data.x, Data.z);
-    g2.show();
+    LOGGER.log(Level.INFO, "Started Hadamar's filling..");
+    Transform.fillHadamardNumbers(Data.N);
+    LOGGER.log(Level.INFO, "Ended Hadamar's filling.");
     
-    Vector<Complex> vec = Transform.conv(Data.yComplexes, Data.zComplexes);
-
-    Graph g3 = new Graph("Convolution Graph 3", Data.x, Transform.getRe(vec));
-    g3.show();
+    Vector<Complex> vec = Transform.DTW(Data.yComplexes);
     
-    vec = Transform.corr(Data.yComplexes, Data.zComplexes);
-    
-    Graph g4 = new Graph("Corr Graph 4", Data.x, Transform.getRe(vec));
-    g4.show();
-
-    vec = Transform.roundConv(Data.yComplexes, Data.zComplexes);
-    
-    Graph g5 = new Graph("RoundConv Graph 5", Data.x, Transform.getRe(vec));
-    g5.show();
-    
-    vec = Transform.roundCorr(Data.yComplexes, Data.zComplexes);
-    
-    Graph g6 = new Graph("RoundCorr Graph 6", Data.x, Transform.getRe(vec));
-    g6.show();
-    
-    
+    Graph g2 = new Graph("DTW", Data.x, Transform.getModule(vec));
+    g2.show();    
   }
 
 }

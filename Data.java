@@ -71,7 +71,6 @@ public class Data {
       yComplexes.add(Complex.valueOf(yReal, 0));
       zComplexes.add(Complex.valueOf(zReal, 0));
     }
-    
   }
   
   public static void showVec(Vector<Complex> vec, String str) {
