@@ -37,6 +37,11 @@ public class Main {
     
     Graph g2 = new Graph("DTW", Data.x, Transform.getModule(vec));
     g2.show();    
+    
+    vec = Transform.DTWR(vec);
+    
+    Graph g3 = new Graph("DTWR", Data.x, Transform.getRe(vec));
+    g3.show();    
   }
 
 }

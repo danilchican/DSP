@@ -61,22 +61,49 @@ public class Transform {
     for (int i = 0; i < Data.N; i++) {
       res.add(Complex.valueOf(0, 0));
     }
-    
-    for (int k = 0; k < Data.N; k++) {
-        for (int i = 0; i < Data.N; i++) {
-          Complex c = _yComplexes.get(i).times(hadamard[k][i]);
-          Complex temp = res.get(k).plus(c);
-          
-          res.set(k, temp);
-        }
-        Complex t = res.get(k).divide(Data.N);
-        res.set(k, t);
 
-        LOGGER.log(Level.DEBUG, "Complex DTW[" + k + "]: " + res.get(k).toString());
+    for (int k = 0; k < Data.N; k++) {
+      for (int i = 0; i < Data.N; i++) {
+        Complex c = _yComplexes.get(i).times(hadamard[k][i]);
+        Complex temp = res.get(k).plus(c);
+
+        res.set(k, temp);
+      }
+      Complex t = res.get(k).divide(Data.N);
+      res.set(k, t);
+
+      LOGGER.log(Level.DEBUG, "Complex DTW[" + k + "]: " + res.get(k).toString());
     }
-    
+
     return res;
-}
+  }
+
+  /**
+   * Reverse discrete Walsh tranforming.
+   * 
+   * @param _c
+   * @return
+   */
+  public static Vector<Complex> DTWR(Vector<Complex> _c) {
+    Vector<Complex> res = new Vector<>();
+
+    for (int i = 0; i < Data.N; i++) {
+      res.add(Complex.valueOf(0, 0));
+    }
+
+    for (int k = 0; k < Data.N; k++) {
+      for (int i = 0; i < Data.N; i++) {
+        Complex e = _c.get(i).times(hadamard[k][i]);
+        Complex temp = res.get(k).plus(e);
+
+        res.set(k, temp);
+      }
+
+      LOGGER.log(Level.DEBUG, "Complex DTWR[" + k + "]: " + res.get(k).toString());
+    }
+
+    return res;
+  }
 
   /**
    * Reverse bits of number.
