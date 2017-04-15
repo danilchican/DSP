@@ -1,5 +1,6 @@
 package com.bsuir.danilchican;
 
+import java.util.Random;
 import java.util.Vector;
 
 import org.apache.logging.log4j.Level;
@@ -33,6 +34,30 @@ public class Transform {
   private static int[][] hadamard = new int[Data.N][Data.N];
 
   /**
+   * Generate noise for vector.
+   * 
+   * @param in
+   * @return
+   */
+  public static Vector<Complex> noiseGen(Vector<Complex> in) {
+    Vector<Complex> res = new Vector<>();
+    
+    for(Complex e: in) {
+      Complex out = Complex.valueOf(0, 0);
+      
+      Random rand = new Random();
+      Complex value = Complex.valueOf(rand.nextDouble() * 0.5, 0);
+      boolean isNegative = rand.nextBoolean();
+      
+      out = isNegative ? e.minus(value) : e.plus(value);
+      
+      res.add(out);
+    }
+    
+    return res;
+  }
+  
+  /**
    * Fill Hadamard numbers.
    */
   public static void fillHadamardNumbers(int N) {
@@ -49,6 +74,14 @@ public class Transform {
     }
   }
   
+  /**
+   * Fast Walsh transforming.
+   * 
+   * @param _a
+   * @param N
+   * @param _dir
+   * @return
+   */
   public static Vector<Complex> FWT(Vector<Complex> _a, int N, int _dir) {
     if (N == 1)
       return _a;
@@ -84,6 +117,14 @@ public class Transform {
     return vec;
   }
   
+  /**
+   * Fast Walsh transforming with ordering.
+   * 
+   * @param _a
+   * @param N
+   * @param _dir
+   * @return
+   */
   public static Vector<Complex> _FWT(Vector<Complex> _a, int N, int _dir) {
     Vector<Complex> vec = FWT(_a, N, _dir);
     
@@ -271,9 +312,40 @@ public class Transform {
 
     return _result;
   }
+  
+  /**
+   * Filter convolution.
+   * 
+   * @param _v1
+   * @param _v2
+   * @return
+   */
+  public static Vector<Complex> filterConv(Vector<Complex> h, Vector<Complex> x) {
+    Vector<Complex> _result = new Vector<>();   
+    
+    for (int n = 0; n < Data.N; n++) {
+      Complex temp = Complex.valueOf(0, 0);
+
+      for (int m = 0; m < Data.M; m++) {
+        int index = n - m;
+
+        if (index < 0) {
+          index = Data.N + index;
+        }
+
+        temp = temp.plus(h.get(m).times(x.get(index)));
+      }
+
+      _result.add(temp);
+    }
+    
+    return _result;
+  }
 
   /**
-   * Multiple vectors. Returns new vector of complex numbers by multiplying their.
+   * Multiple vectors. 
+   * Returns new vector of complex numbers
+   * by multiplying their.
    * 
    * @param _v1
    * @param _v2
@@ -487,6 +559,5 @@ public class Transform {
 
     return w;
   }
-
 
 }

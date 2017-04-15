@@ -16,6 +16,10 @@ import org.jscience.mathematics.number.Complex;
  * 
  * lab2:
  * N(FFT) = 16
+ * 
+ * lab4:
+ * f1: LQ window filter. Hamming
+ * f2: Bandpass narrowband filter
  */
 public class Main {
   
@@ -25,33 +29,27 @@ public class Main {
     LOGGER.log(Level.INFO, "Started init lab1..");
     Data.initLab1();
     LOGGER.log(Level.INFO, "Finished init lab1..");
+    
+    //Data.input();
+    LOGGER.log(Level.INFO, "Starter initializing impulse coeffs...");
+    Data.initImpulseCoeffs();
+    LOGGER.log(Level.INFO, "Started coeffs  normalizing...");
+    Data.normalizeCoeffs();
 
+    LOGGER.log(Level.INFO, "Started generation noise...");
+    Vector<Complex> noise = Transform.noiseGen(Data.yComplexes);
+
+    LOGGER.log(Level.INFO, "Started 1st filtering...");
+    Vector<Complex> vec = Transform.filterConv(Data.impCoeffs, noise);
+    
     Graph g1 = new Graph("Input XY data", Data.x, Data.y);
     g1.show();    
-    
-    LOGGER.log(Level.INFO, "Started Hadamar's filling..");
-    Transform.fillHadamardNumbers(Data.N);
-    LOGGER.log(Level.INFO, "Ended Hadamar's filling.");
-    
-    Vector<Complex> vec = Transform.DTW(Data.yComplexes);
-    
-    Graph g2 = new Graph("DTW", Data.x, Transform.getModule(vec));
-    g2.show();    
-    
-    vec = Transform.DTWR(vec);
-    
-    Graph g3 = new Graph("DTWR", Data.x, Transform.getRe(vec));
-    g3.show();    
-    
-    vec = Transform._FWT(Data.yComplexes, Data.N, 1);
-    
-    Graph g4 = new Graph("FWT", Data.x, Transform.getModule(vec));
-    g4.show(); 
 
-    vec = Transform._FWT(vec, Data.N, -1);
+    Graph g2 = new Graph("Noise Data", Data.x, Transform.getRe(noise));
+    g2.show();
     
-    Graph g5 = new Graph("FWTR", Data.x, Transform.getRe(vec));
-    g5.show();    
+    Graph g3 = new Graph("Filter 1", Data.x, Transform.getRe(vec));
+    g3.show();
   }
 
 }
