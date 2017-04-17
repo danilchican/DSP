@@ -11,7 +11,7 @@ import org.jscience.mathematics.number.Complex;
 public class Data {
 
   private static Logger LOGGER = LogManager.getLogger();
-  
+
   /**
    * Count of points operations.
    */
@@ -33,6 +33,21 @@ public class Data {
   public static int CUT_FREQUENCY = 2;
 
   /**
+   * Narrow bandwidth.
+   */
+  public static double BW_NARROW = 0.02;
+
+  /**
+   * R param.
+   */
+  public static final double R = 1 - 3 * BW_NARROW;
+
+  /**
+   * PASS frequency.
+   */
+  public static int PASS_FREQUENCY = 2;
+
+  /**
    * Exponent.
    */
   public static final int M = (int) (4 / BW);
@@ -48,6 +63,16 @@ public class Data {
   public static final double NORMALIZE_RATE_FC = CUT_FREQUENCY / SAMPLE_RATE;
 
   /**
+   * Normalize narrow rate FC.
+   */
+  public static final double NORMALIZE_RATE_FC_NARROW = PASS_FREQUENCY / SAMPLE_RATE;
+
+  /**
+   * K narrow.
+   */
+  public static double K_NARROW = 0;
+
+  /**
    * sin(2x)
    */
   public static final int coefSinX = 2;
@@ -56,6 +81,12 @@ public class Data {
    * cos(7x)
    */
   public static final int coefCosX = 7;
+
+  public static double a0;
+  public static double a1;
+  public static double a2;
+  public static double b1;
+  public static double b2;
 
   /**
    * Numbers.
@@ -80,26 +111,26 @@ public class Data {
   /**
    * Input data from keyboard for lab4.
    */
-  public static void input() {
+  public static void inputFirstFilter() {
     Scanner in = new Scanner(System.in);
     LOGGER.log(Level.INFO, "Input bandwidth (BW): ");
-    
+
     BW = in.nextDouble();
     LOGGER.log(Level.INFO, "Inputed value BW: = " + BW);
 
-    if (BW < 0 || BW > 0.5) {   
+    if (BW < 0 || BW > 0.5) {
       LOGGER.log(Level.WARN, "Repeat please (BW = 0 .. 0.5): ");
-    
+
       BW = in.nextDouble();
       LOGGER.log(Level.INFO, "Inputed value BW: = " + BW);
     }
-    
+
     LOGGER.log(Level.INFO, "Input cut frequency (CF): ");
     CUT_FREQUENCY = in.nextInt();
 
     if (CUT_FREQUENCY > SAMPLE_RATE / 2) {
       LOGGER.log(Level.WARN, "Repeat please (CF < " + SAMPLE_RATE / 2 + ": ");
-      
+
       CUT_FREQUENCY = in.nextInt();
       LOGGER.log(Level.INFO, "Inputed value CF: = " + CUT_FREQUENCY);
     }
@@ -114,34 +145,52 @@ public class Data {
     for (int i = 0; i < M; i++) {
       double value = 0;
       double w = 0.54 - 0.46 * Math.cos(2 * Math.PI * i / M);
-     
+
       value = 2 * Math.PI * NORMALIZE_RATE_FC;
-      
+
       if (i - M / 2 != 0) {
         double c = (i - M / 2);
-        value = Math.sin(value * c) / c; 
+        value = Math.sin(value * c) / c;
       }
-        
+
       value = value * w;
       Complex e = Complex.valueOf(value, 0);
-      
+
       impCoeffs.add(e);
     }
   }
-  
+
   /**
    * Normalize coeffs.
    */
   public static void normalizeCoeffs() {
-    for(int i = 0; i < M; i++) {
+    for (int i = 0; i < M; i++) {
       K = K + impCoeffs.get(i).getReal();
     }
-    
-    for(int i = 0; i < M; i++) {
-     Complex e = impCoeffs.get(i).divide(K); 
-   
-     impCoeffs.set(i, e);
+
+    for (int i = 0; i < M; i++) {
+      Complex e = impCoeffs.get(i).divide(K);
+
+      impCoeffs.set(i, e);
     }
+  }
+
+  /**
+   * Init second filter data.
+   */
+  public static void initSecondFilster() {
+    double top = 1 - 2 * R * Math.cos(2 * Math.PI * NORMALIZE_RATE_FC_NARROW) + Math.pow(R, 2);
+    double bottom = 2 - 2 * Math.cos(2 * Math.PI * NORMALIZE_RATE_FC_NARROW);
+
+    K_NARROW = top / bottom;
+
+    LOGGER.log(Level.DEBUG, "K_NARROW = " + K_NARROW);
+
+    a0 = 1 - K_NARROW;
+    a1 = 2 * (K_NARROW - R) * Math.cos(2 * Math.PI * NORMALIZE_RATE_FC_NARROW);
+    a2 = Math.pow(R, 2) - K_NARROW;
+    b1 = 2 * R * Math.cos(2 * Math.PI * NORMALIZE_RATE_FC_NARROW);
+    b2 = -Math.pow(R, 2);
   }
 
   /**

@@ -28,9 +28,10 @@ public class Main {
   public static void main(String[] args) {    
     LOGGER.log(Level.INFO, "Started init lab1..");
     Data.initLab1();
+    Data.initSecondFilster();
     LOGGER.log(Level.INFO, "Finished init lab1..");
     
-    //Data.input();
+    //Data.inputFirstFilter();
     LOGGER.log(Level.INFO, "Starter initializing impulse coeffs...");
     Data.initImpulseCoeffs();
     LOGGER.log(Level.INFO, "Started coeffs  normalizing...");
