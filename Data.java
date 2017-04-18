@@ -35,7 +35,7 @@ public class Data {
   /**
    * Narrow bandwidth.
    */
-  public static double BW_NARROW = 0.02;
+  public static final double BW_NARROW = 0.005;
 
   /**
    * R param.
@@ -45,7 +45,7 @@ public class Data {
   /**
    * PASS frequency.
    */
-  public static int PASS_FREQUENCY = 2;
+  public static final int PASS_FREQUENCY = 3;
 
   /**
    * Exponent.
@@ -82,11 +82,11 @@ public class Data {
    */
   public static final int coefCosX = 7;
 
-  public static double a0;
-  public static double a1;
-  public static double a2;
-  public static double b1;
-  public static double b2;
+  public static double A0;
+  public static double A1;
+  public static double A2;
+  public static double B1;
+  public static double B2;
 
   /**
    * Numbers.
@@ -186,11 +186,11 @@ public class Data {
 
     LOGGER.log(Level.DEBUG, "K_NARROW = " + K_NARROW);
 
-    a0 = 1 - K_NARROW;
-    a1 = 2 * (K_NARROW - R) * Math.cos(2 * Math.PI * NORMALIZE_RATE_FC_NARROW);
-    a2 = Math.pow(R, 2) - K_NARROW;
-    b1 = 2 * R * Math.cos(2 * Math.PI * NORMALIZE_RATE_FC_NARROW);
-    b2 = -Math.pow(R, 2);
+    A0 = 1 - K_NARROW;
+    A1 = 2 * (K_NARROW - R) * Math.cos(2 * Math.PI * NORMALIZE_RATE_FC_NARROW);
+    A2 = Math.pow(R, 2) - K_NARROW;
+    B1 = 2 * R * Math.cos(2 * Math.PI * NORMALIZE_RATE_FC_NARROW);
+    B2 = -Math.pow(R, 2);
   }
 
   /**

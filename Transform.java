@@ -8,6 +8,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jscience.mathematics.number.Complex;
 
+import static com.bsuir.danilchican.Data.*;
+
 public class Transform {
 
   private static Logger LOGGER = LogManager.getLogger();
@@ -41,22 +43,22 @@ public class Transform {
    */
   public static Vector<Complex> noiseGen(Vector<Complex> in) {
     Vector<Complex> res = new Vector<>();
-    
-    for(Complex e: in) {
+
+    for (Complex e : in) {
       Complex out = Complex.valueOf(0, 0);
-      
+
       Random rand = new Random();
       Complex value = Complex.valueOf(rand.nextDouble() * 0.5, 0);
       boolean isNegative = rand.nextBoolean();
-      
+
       out = isNegative ? e.minus(value) : e.plus(value);
-      
+
       res.add(out);
     }
-    
+
     return res;
   }
-  
+
   /**
    * Fill Hadamard numbers.
    */
@@ -73,7 +75,7 @@ public class Transform {
       }
     }
   }
-  
+
   /**
    * Fast Walsh transforming.
    * 
@@ -116,7 +118,7 @@ public class Transform {
 
     return vec;
   }
-  
+
   /**
    * Fast Walsh transforming with ordering.
    * 
@@ -127,17 +129,17 @@ public class Transform {
    */
   public static Vector<Complex> _FWT(Vector<Complex> _a, int N, int _dir) {
     Vector<Complex> vec = FWT(_a, N, _dir);
-    
-    if(_dir == 1) {
+
+    if (_dir == 1) {
       Vector<Complex> res = new Vector<>();
-      
-      for(Complex e: vec) {
+
+      for (Complex e : vec) {
         res.add(e.divide(Data.N));
       }
 
-      return res; 
+      return res;
     }
-    
+
     return vec;
   }
 
@@ -312,7 +314,7 @@ public class Transform {
 
     return _result;
   }
-  
+
   /**
    * Filter convolution.
    * 
@@ -321,8 +323,8 @@ public class Transform {
    * @return
    */
   public static Vector<Complex> filterConv(Vector<Complex> h, Vector<Complex> x) {
-    Vector<Complex> _result = new Vector<>();   
-    
+    Vector<Complex> _result = new Vector<>();
+
     for (int n = 0; n < Data.N; n++) {
       Complex temp = Complex.valueOf(0, 0);
 
@@ -338,14 +340,12 @@ public class Transform {
 
       _result.add(temp);
     }
-    
+
     return _result;
   }
 
   /**
-   * Multiple vectors. 
-   * Returns new vector of complex numbers
-   * by multiplying their.
+   * Multiple vectors. Returns new vector of complex numbers by multiplying their.
    * 
    * @param _v1
    * @param _v2
@@ -558,6 +558,36 @@ public class Transform {
     }
 
     return w;
+  }
+
+  /**
+   * Narrow filtering method.
+   * 
+   * @param vec
+   * @return
+   */
+  public static Vector<Complex> narrowFilter(Vector<Complex> vec) {
+    Vector<Complex> res = new Vector<>();
+
+    for (int i = 0; i < 2; i++) {
+      res.add(Complex.valueOf(0, 0));
+    }
+
+    for (int i = 2; i < Data.N; i++) {
+      Complex e;
+
+      double a =
+          A0 * vec.get(i).getReal() + A1 * vec.get(i - 1).getReal() + A2 * vec.get(i - 2).getReal();
+
+      double b = B1 * res.get(i - 1).getReal() + B2 * res.get(i - 2).getReal();
+
+      double rOperation = a + b;
+      e = Complex.valueOf(rOperation, 0);
+
+      res.add(e);
+    }
+
+    return res;
   }
 
 }

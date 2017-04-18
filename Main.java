@@ -26,10 +26,13 @@ public class Main {
   private static Logger LOGGER = LogManager.getLogger();
   
   public static void main(String[] args) {    
-    LOGGER.log(Level.INFO, "Started init lab1..");
+    LOGGER.log(Level.INFO, "Started init lab1...");
     Data.initLab1();
+    LOGGER.log(Level.INFO, "Finished init lab1...");
+    
+    LOGGER.log(Level.INFO, "Started init second filter data...");
     Data.initSecondFilster();
-    LOGGER.log(Level.INFO, "Finished init lab1..");
+    LOGGER.log(Level.INFO, "Finished init second filter data...");
     
     //Data.inputFirstFilter();
     LOGGER.log(Level.INFO, "Starter initializing impulse coeffs...");
@@ -38,19 +41,24 @@ public class Main {
     Data.normalizeCoeffs();
 
     LOGGER.log(Level.INFO, "Started generation noise...");
-    Vector<Complex> noise = Transform.noiseGen(Data.yComplexes);
+    Vector<Complex> noiseVec = Transform.noiseGen(Data.yComplexes);
 
     LOGGER.log(Level.INFO, "Started 1st filtering...");
-    Vector<Complex> vec = Transform.filterConv(Data.impCoeffs, noise);
+    Vector<Complex> vec = Transform.filterConv(Data.impCoeffs, noiseVec);
     
     Graph g1 = new Graph("Input XY data", Data.x, Data.y);
     g1.show();    
 
-    Graph g2 = new Graph("Noise Data", Data.x, Transform.getRe(noise));
+    Graph g2 = new Graph("Noise Data", Data.x, Transform.getRe(noiseVec));
     g2.show();
     
     Graph g3 = new Graph("Filter 1", Data.x, Transform.getRe(vec));
     g3.show();
+    
+    vec = Transform.narrowFilter(noiseVec);
+    
+    Graph g4 = new Graph("Filter 2", Data.x, Transform.getRe(vec));
+    g4.show();
   }
 
 }
